@@ -1,0 +1,8 @@
+/build/
+/trabalho
+*.o
+/indices/*
+/resultados/*
+/experimentos/*.png
+/experimentos/*.pdf
+/experimentos/*.csv
