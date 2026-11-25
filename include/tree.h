@@ -25,14 +25,11 @@ typedef struct {
 TREE *tree_create(TREE_KIND kind);
 void tree_destroy(TREE **tree);
 bool tree_insert(TREE *tree, const char *key, uint64_t offset);
-bool tree_find(const TREE *tree, const char *key, TREE_OFFSETS *result);
-size_t tree_distinct_keys(const TREE *tree);
-size_t tree_height(const TREE *tree);
-uint64_t tree_comparisons(const TREE *tree);
-uint64_t tree_rotations(const TREE *tree);
-uint64_t tree_recolors(const TREE *tree);
+bool tree_find(const TREE *tree, const char *key, TREE_OFFSETS *result,
+               uint64_t *comparisons);
 TREE_STATS tree_stats(const TREE *tree);
 bool tree_write(FILE *file, const TREE *tree);
-TREE *tree_read(FILE *file, TREE_KIND kind);
+TREE *tree_read(FILE *file, TREE_KIND kind, uint64_t data_size,
+                uint64_t *record_count);
 
 #endif

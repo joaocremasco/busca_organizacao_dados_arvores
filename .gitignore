@@ -2,7 +2,6 @@
 /trabalho
 *.o
 /indices/*
+!/indices/.gitkeep
 /resultados/*
-/experimentos/*.png
-/experimentos/*.pdf
-/experimentos/*.csv
+!/resultados/.gitkeep

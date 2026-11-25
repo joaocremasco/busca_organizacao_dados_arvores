@@ -1,26 +1,23 @@
-#ifndef ITEM_H
-#define ITEM_H
+#ifndef PROJETO2_ITEM_H
+#define PROJETO2_ITEM_H
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
 
-typedef struct item_ ITEM;
-typedef struct item_store ITEM_STORE;
+typedef struct {
+    char *key;
+    uint64_t *offsets;
+    size_t offset_count;
+    size_t offset_capacity;
+} ITEM;
 
-// O ITEM_STORE é dono dos itens; as coleções guardam apenas referências.
-ITEM_STORE *item_store_create(void);
-// Libera todos os itens e seus campos registrados no armazenamento.
-void item_store_destroy(ITEM_STORE **store);
-// field_capacity define a capacidade inicial do vetor de campos.
-ITEM *item_create(ITEM_STORE *store, size_t field_capacity) ;
-// Copia name e raw_value para o ITEM.
-bool item_set(ITEM *item, const char *name, const char *raw_value);
-// Devolve NULL se o campo não existir.
-const char *item_get(const ITEM *item, const char *name);
-// Devolve false se o campo não existir ou não representar um número completo.
-bool item_get_number(const ITEM *item, const char *name, double *value);
-size_t item_field_count(const ITEM *item);
-const char *item_field_name(const ITEM *item, size_t index);
-const char *item_field_value(const ITEM *item, size_t index);
+bool item_init(ITEM *item, const char *key, uint64_t offset);
+bool item_append(ITEM *item, uint64_t offset);
+void item_destroy(ITEM *item);
+bool item_write(FILE *file, const ITEM *item);
+bool item_read(FILE *file, ITEM *item, uint64_t data_size,
+               uint64_t *record_count);
 
 #endif

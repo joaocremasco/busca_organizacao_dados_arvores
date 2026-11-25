@@ -1,7 +1,7 @@
-#include "../include/tree.h"
-#include "../include/abb.h"
-#include "../include/avl.h"
-#include "../include/rubro_negra.h"
+#include "tree.h"
+#include "abb.h"
+#include "avl.h"
+#include "rubro_negra.h"
 
 #include <stdlib.h>
 
@@ -43,11 +43,12 @@ bool tree_insert(TREE *tree, const char *key, uint64_t offset) {
     return rb_insert(tree->impl.rb, key, offset);
 }
 
-bool tree_find(const TREE *tree, const char *key, TREE_OFFSETS *result) {
+bool tree_find(const TREE *tree, const char *key, TREE_OFFSETS *result,
+               uint64_t *comparisons) {
     if (tree == NULL) return false;
-    if (tree->kind == TREE_ABB) return abb_find(tree->impl.abb, key, result);
-    if (tree->kind == TREE_AVL) return avl_find(tree->impl.avl, key, result);
-    return rb_find(tree->impl.rb, key, result);
+    if (tree->kind == TREE_ABB) return abb_find(tree->impl.abb, key, result, comparisons);
+    if (tree->kind == TREE_AVL) return avl_find(tree->impl.avl, key, result, comparisons);
+    return rb_find(tree->impl.rb, key, result, comparisons);
 }
 
 TREE_STATS tree_stats(const TREE *tree) {
@@ -58,12 +59,6 @@ TREE_STATS tree_stats(const TREE *tree) {
     return rb_stats(tree->impl.rb);
 }
 
-size_t tree_distinct_keys(const TREE *tree) { return tree_stats(tree).distinct; }
-size_t tree_height(const TREE *tree) { return tree_stats(tree).height; }
-uint64_t tree_comparisons(const TREE *tree) { return tree_stats(tree).comparisons; }
-uint64_t tree_rotations(const TREE *tree) { return tree_stats(tree).rotations; }
-uint64_t tree_recolors(const TREE *tree) { return tree_stats(tree).recolors; }
-
 bool tree_write(FILE *file, const TREE *tree) {
     if (file == NULL || tree == NULL) return false;
     if (tree->kind == TREE_ABB) return abb_write(file, tree->impl.abb);
@@ -71,15 +66,20 @@ bool tree_write(FILE *file, const TREE *tree) {
     return rb_write(file, tree->impl.rb);
 }
 
-TREE *tree_read(FILE *file, TREE_KIND kind) {
+TREE *tree_read(FILE *file, TREE_KIND kind, uint64_t data_size,
+                uint64_t *record_count) {
     if (file == NULL) return NULL;
+    if (kind < TREE_ABB || kind > TREE_RB || record_count == NULL) return NULL;
     TREE *tree = calloc(1, sizeof(*tree));
     if (tree == NULL) return NULL;
     tree->kind = kind;
-    if (kind == TREE_ABB) tree->impl.abb = abb_read(file);
-    else if (kind == TREE_AVL) tree->impl.avl = avl_read(file);
-    else if (kind == TREE_RB) tree->impl.rb = rb_read(file);
-    else { free(tree); return NULL; }
+    if (kind == TREE_ABB) tree->impl.abb = abb_read(file, data_size, record_count);
+    else if (kind == TREE_AVL) tree->impl.avl = avl_read(file, data_size, record_count);
+    else if (kind == TREE_RB) tree->impl.rb = rb_read(file, data_size, record_count);
+    else {
+        free(tree);
+        return NULL;
+    }
     if ((kind == TREE_ABB && tree->impl.abb == NULL) ||
         (kind == TREE_AVL && tree->impl.avl == NULL) ||
         (kind == TREE_RB && tree->impl.rb == NULL)) {

@@ -1,0 +1,125 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{longtable}
+\geometry{margin=2.5cm}
+\newcommand{\TODO}[1]{\textbf{[TODO: #1]}}
+\newcommand{\grafico}[2]{%
+  \IfFileExists{../experimentos/graficos/#1.pdf}{%
+    \begin{figure}[H]\centering
+    \includegraphics[width=0.9\textwidth]{../experimentos/graficos/#1.pdf}
+    \caption{#2}\end{figure}%
+  }{\TODO{gerar o gráfico #1}}%
+}
+\title{Projeto 2: Índices em Árvores de Busca}
+\author{SCC0202 -- Algoritmos e Estruturas de Dados I}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\section{Objetivo e escolhas de implementação}
+O programa indexa os CSVs do Projeto 1 sem armazenar a base inteira. O leitor devolve um registro de cada vez e reutiliza o buffer de campos. A árvore mantém uma chave textual por nó e um vetor de offsets em bytes para todas as linhas com aquele valor. O leitor ignora linhas totalmente vazias, preserva valores ausentes como strings vazias e entende aspas, delimitadores citados e quebras de linha citadas.
+
+ABB, AVL e rubro-negra são TADs distintos. A ABB pode ficar degenerada, mas suas operações de percurso, leitura, gravação e destruição são iterativas para não estourar a pilha. A AVL grava altura por nó; a rubro-negra grava a cor de cada nó e calcula a altura ao final. As três mantêm um único nó por chave distinta.
+
+As chaves são strings e as consultas usam igualdade exata com \texttt{strcmp}. Não há conversão numérica: \texttt{2020}, \texttt{2020.0} e \texttt{02020} são chaves diferentes. Colunas multivaloradas, como \texttt{Genres}, são indexadas como o texto completo; \texttt{Action} não equivale a \texttt{Action,Indie}.
+
+\section{Formato persistido do índice}
+O índice usa a assinatura de oito bytes \texttt{AED1IDX2}, seguida dos campos abaixo. Os inteiros de 32 e 64 bits são serializados byte a byte em little-endian. Nenhum ponteiro de memória é persistido.
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Campo & Representação \\
+\midrule
+Versão do formato & $u32$, atualmente 3 \\
+Tipo de árvore & $u32$: ABB, AVL ou rubro-negra \\
+Tipo de chave & $u32$: 1 para string \\
+Nome da chave & comprimento $u32$ e bytes \\
+Nome-base do CSV & comprimento $u32$ e bytes \\
+Tamanho do CSV & $u64$ bytes \\
+Modificação do CSV & segundos desde a época, armazenados em $u64$ \\
+Registros indexados & $u64$ \\
+Chaves distintas & $u64$ \\
+Checksum do CSV & FNV-1a de 64 bits \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+O checksum combina o cabeçalho CSV, os primeiros 4096 bytes e os últimos 4096 bytes. Na carga, o programa valida nome-base, tamanho, data de modificação e checksum; depois valida offsets, contagem de registros, número de chaves distintas, ordenação da árvore e os invariantes de balanceamento aplicáveis. Cada nó guarda um marcador de presença, a chave e a coleção de offsets. AVL também guarda sua altura em $u32$; rubro-negra guarda sua cor em um byte. Filhos são serializados em pré-ordem com marcadores de presença.
+
+\section{Convenções e métricas}
+A altura é medida em nós: árvore vazia tem altura zero e folha tem altura um. Uma rotação dupla soma duas rotações elementares. Recolors contam apenas mudanças efetivas; a cor inicial do nó recém-criado não é contada. \texttt{INSERT\_COMPARISONS} soma comparações durante inserções. \texttt{SEARCH\_COMPARISONS} é contado localmente durante buscas e não altera o TAD.
+
+\texttt{MATCHED\_OFFSETS} soma os tamanhos dos vetores retornados por todas as linhas de consulta, incluindo chaves repetidas e sobreposição entre índices. \texttt{OUTPUT\_RECORDS} conta offsets únicos exportados. Os vetores de offsets de chaves consultadas são deduplicados por identidade antes de cópia; a união final é ordenada por offset e deduplicada. \texttt{SEARCH\_MS} cobre somente chamadas à árvore. \texttt{DEDUP\_MS}, \texttt{FETCH\_MS} e \texttt{WRITE\_MS} separam união, leitura direta do CSV e gravação. \texttt{READ\_MS} e \texttt{INSERT\_MS} são medidos por registro, portanto incluem o pequeno custo das chamadas ao relógio.
+
+\section{Complexidade}
+Se $D$ é o número de chaves distintas e $N$ o número de registros, a busca e inserção na ABB custam $O(h)$, em que $h$ é a altura. Com ordem de inserção aleatória, a altura esperada é $O(\log D)$; no pior caso, chaves em ordem crescente ou decrescente formam uma cadeia, com custo $O(D)$. Construir a ABB custa $O(N\log D)$ em ordem de inserção favorável, mas chega a $O(ND)$, ou $O(N^2)$ quando todas as chaves são distintas e inseridas em ordem.
+
+AVL e rubro-negra mantêm altura $O(\log D)$ no pior caso. Busca e inserção custam $O(\log D)$ por registro consultado/inserido e a construção custa $O(N\log D)$. Uma chave repetida não cria nó nem rotação; a busca para localizar o nó continua custando $O(\log D)$ e anexar o offset custa $O(1)$ amortizado no vetor dinâmico. O armazenamento é $O(D+N)$, contando os nós e todos os offsets.
+
+Para $Q$ chaves consultadas, a busca nas árvores custa $O(Qh)$ no total. Se as chaves encontradas apontam para $M$ offsets, mesclar e ordenar os resultados custa $O(M\log M)$ no pior caso. A aplicação busca registros por posicionamento no offset: cada acesso envolve um reposicionamento no arquivo e a leitura dos bytes do registro, seguida da escrita desses bytes. O custo físico de seeks e do volume transferido não é representado completamente pela complexidade assintótica.
+
+\section{Discussão das estruturas}
+\subsection{Quando a ABB se aproxima das balanceadas?}
+Quando a ordem de inserção distribui as chaves de modo que os subárvores fiquem aproximadamente equilibrados, a ABB pode ter altura semelhante à AVL e à rubro-negra. Se as chaves chegam ordenadas, a árvore se aproxima de uma lista e tanto inserção quanto busca podem custar linearmente. A ABB iterativa evita falha de pilha nesse caso, sem remover a degradação de tempo esperada.
+
+\subsection{Efeito de rotações e recolors}
+Rotações e alterações de cor acrescentam operações durante a construção. A AVL atualiza alturas e pode executar rotações; a rubro-negra faz reparos de cor e rotações. Essas operações mantêm a altura limitada e, portanto, não são repetidas durante busca. O custo de busca depende da altura final e das comparações, não do número histórico de rotações ou recolors.
+
+\subsection{Mais chaves simples ou complexas}
+Em árvores balanceadas, aumentar o número de chaves consultadas aumenta aproximadamente de forma linear o número de buscas, com custo $O(Q\log D)$, além dos resultados retornados. Uma consulta complexa continua sendo uma união OU; ela usa os índices de cada coluna mencionada. O número total de chaves e a distribuição por coluna determinam o trabalho das árvores, enquanto o número de offsets retornados determina o custo posterior de mesclagem e acesso ao arquivo.
+
+\subsection{Quando o arquivo domina?}
+Quando muitas consultas retornam muitos registros, o custo de reposicionar o arquivo, transferir registros grandes e gravar a saída pode superar as comparações da árvore. Deduplicar por offset evita reler e regravar o mesmo registro quando consultas repetidas ou índices diferentes apontam para ele. Em discos com alto custo de seek, a ordem crescente dos offsets também pode reduzir movimentos em comparação a uma ordem arbitrária.
+
+\subsection{Consistência entre repetições e bases}
+Os tempos foram medidos em dez repetições e a ordem das árvores foi rotacionada. A árvore mais rápida variou entre base, coluna e tamanho; não há vencedora uniforme. Por exemplo, nas amostras de 10000 registros de asteroides, a rubro-negra teve a menor média de construção nas chaves \texttt{year} e \texttt{on\_sentry\_list}; nas amostras de 1000 registros, a AVL teve a menor média nas duas colunas de games. Em games, as diferenças médias de construção nas duas colunas e nas buscas de 1000 chaves também foram pequenas frente à variação de algumas configurações. A variabilidade é visível nos desvios padrão das tabelas, sobretudo na amostra de games com 1000 registros.
+
+O aumento de chaves consultadas eleva o trabalho das árvores em ambas as modalidades. A consulta complexa busca em mais de um índice e une os offsets, por isso seu custo total também depende da sobreposição e da quantidade de registros encontrados. Nas configurações de 10000 registros e 1000 chaves, os tempos de árvore ficaram em décimos de milissegundo, enquanto o tempo total chegou a dezenas de milissegundos. Nesses casos, leitura dos registros e escrita da saída dominam. Remover offsets repetidos evita reler e regravar registros sobrepostos; a métrica \texttt{MATCHED\_OFFSETS} registra a quantidade bruta e \texttt{OUTPUT\_RECORDS}, a quantidade efetivamente exportada.
+
+Essas observações são limitadas a dois tamanhos pequenos e a uma máquina. Frequência dinâmica do processador, cache, volume da saída e carga do sistema afetam as medições. A ausência de diferença estatística nos outros três pares testados não prova equivalência entre as estruturas; indica somente que, nessas configurações e com dez repetições, não se detectou diferença pelo teste usado.
+
+\section{Protocolo experimental e resultados}
+As medições deste relatório foram feitas nas duas bases locais do Projeto 1. O script seleciona registros por reservoir sampling, embaralha a amostra e fixa a semente em 20261125. Foram usados tamanhos de 1000 e 10000 registros, dez repetições por configuração, buscas simples com 1, 10, 100 e 1000 chaves e buscas complexas com 10, 100 e 1000 chaves distribuídas entre duas colunas. As consultas incluem valores presentes, inexistentes e repetidos. A ordem das árvores é rotacionada entre repetições. As saídas foram comparadas por MD5 em cada configuração; todas coincidiram.
+
+O escopo medido é menor que os tamanhos máximos oferecidos pelos scripts (100000 e 500000 registros). Portanto, as observações abaixo descrevem apenas as amostras de 1000 e 10000 registros e não devem ser extrapoladas para bases maiores. Os CSVs brutos, o ambiente de execução e os resumos estão em \texttt{experimentos/dados/}; os gráficos são gerados em \texttt{experimentos/graficos/}.
+
+O experimento foi executado em Linux x86\_64, kernel 6.18.62-1-lts, GCC 16.2.1 e flags \texttt{-std=c99 -Wall -Wextra -Wpedantic -O2}, em Intel Core i5-10210U. A coleta foi feita em uma única máquina; variação de frequência, cache e carga concorrente continuam sendo possíveis fontes de ruído.
+
+\subsection{Construção}
+\IfFileExists{tabela_construcao.tex}{\input{tabela_construcao.tex}}{\TODO{executar experimentos/analise.py para inserir a tabela de construção}}
+
+\subsection{Busca simples e complexa}
+\IfFileExists{tabela_busca.tex}{\input{tabela_busca.tex}}{\TODO{executar experimentos/analise.py para inserir as tabelas de busca}}
+
+\subsection{Estatística pareada}
+Para as diferenças pareadas $d_i=x_i^{(A)}-x_i^{(B)}$, calcula-se $\bar d$, o desvio padrão amostral $s_d$ e $t=\bar d/(s_d/\sqrt{r})$. Para dez repetições, o valor crítico bilateral a 5\% com nove graus de liberdade é 2,262. Rejeita-se $H_0$ quando $|t|>2,262$. A análise automática também registra o valor-p se SciPy estiver instalado.
+
+Na configuração de asteroides, 1000 registros e consulta complexa de 10 chaves, ABB contra AVL produziu $t=2{,}753$, acima do crítico, enquanto AVL contra rubro-negra produziu $t=-1{,}000$. Na configuração de games, 10000 registros e busca simples de 1000 chaves, os valores foram $t=1{,}005$ para ABB contra AVL e $t=0{,}234$ para AVL contra rubro-negra. Assim, somente o primeiro par apresentou diferença estatisticamente detectável entre as quatro comparações selecionadas. A diferença média desse par foi de apenas 0,0008 ms; isso não representa, por si só, um ganho prático relevante. Os tempos de busca são muito pequenos diante dos custos de carregar o índice e buscar/gravar registros, e a impressão com três casas decimais limita a leitura de diferenças muito finas.
+
+\IfFileExists{../experimentos/dados/testes_pareados.tex}{\input{../experimentos/dados/testes_pareados.tex}}{\TODO{arquivo de teste pareado ausente}}
+
+\subsection{Gráficos}
+\grafico{construcao_asteroids_year}{Construção por tamanho: asteroides, chave year.}
+\grafico{construcao_games_Genres}{Construção por tamanho: games, chave Genres.}
+\grafico{busca_simple_asteroids}{Busca simples por quantidade de chaves: asteroides.}
+\grafico{busca_complex_asteroids}{Busca complexa por quantidade de chaves: asteroides.}
+\grafico{busca_simple_games}{Busca simples por quantidade de chaves: games.}
+\grafico{busca_complex_games}{Busca complexa por quantidade de chaves: games.}
+\grafico{operacoes_insert_comparisons_asteroids_year}{Comparações de inserção em função do tempo de construção.}
+\grafico{operacoes_rotations_asteroids_year}{Rotações em função do tempo de construção.}
+\grafico{operacoes_tree_height_games_Genres}{Altura final em função do tempo de construção.}
+\grafico{custo_load_index_ms_simple_asteroids}{Tempo de carga do índice nas buscas simples de asteroides.}
+\grafico{custo_fetch_ms_simple_asteroids}{Tempo de leitura dos registros nas buscas simples de asteroides.}
+\grafico{custo_write_ms_simple_asteroids}{Tempo de escrita nas buscas simples de asteroides.}
+\grafico{custo_total_ms_simple_asteroids}{Custo total da busca simples em asteroides.}
+\grafico{custo_total_ms_complex_games}{Custo total da busca complexa em games.}
+
+\end{document}

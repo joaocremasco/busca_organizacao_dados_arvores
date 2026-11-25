@@ -1,0 +1,1 @@
+KEY|asteroid_designation|2020 AY1

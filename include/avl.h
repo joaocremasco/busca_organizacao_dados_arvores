@@ -5,8 +5,9 @@ typedef struct avl AVL;
 AVL *avl_create(void);
 void avl_destroy(AVL **avl);
 bool avl_insert(AVL *avl, const char *key, uint64_t offset);
-bool avl_find(const AVL *avl, const char *key, TREE_OFFSETS *result);
+bool avl_find(const AVL *avl, const char *key, TREE_OFFSETS *result,
+              uint64_t *comparisons);
 TREE_STATS avl_stats(const AVL *avl);
 bool avl_write(FILE *file, const AVL *avl);
-AVL *avl_read(FILE *file);
+AVL *avl_read(FILE *file, uint64_t data_size, uint64_t *record_count);
 #endif

@@ -1,0 +1,7 @@
+id,group,kind,note
+1,a,x,"comma, value"
+2,b,y,"line one
+line two"
+
+3,a,y,
+4,c,x,"quote ""x"""

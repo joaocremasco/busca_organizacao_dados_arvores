@@ -1,196 +1,99 @@
-// Um ITEM guarda pares nome/valor; o ITEM_STORE controla seu ciclo de vida.
-#include <stdio.h>
+#include "item.h"
+#include "util.h"
+
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
-#include <ctype.h>
-#include "../include/item.h"
 
+#define MAX_ITEM_OFFSETS UINT64_C(10000000)
 
-typedef struct {
-  char *name;
-  char *value;
-} FIELD;
-
-struct item_ {
-  FIELD *fields;
-  size_t count;
-  size_t capacity;
-};
-
-struct item_store {
-  ITEM **items;
-  size_t count;
-  size_t capacity;
-};
-
-static bool store_add(ITEM_STORE *store, ITEM *item);
-
-// Duplica uma string sem depender da função strdup, que não faz parte do C99.
-static char *copy_string(const char *s)
-{
-  size_t n = strlen(s) + 1;
-  char *p = malloc(n);
-  if (p != NULL)
-    memcpy(p, s, n);
-  return p;
-}
-
-// Registra um ITEM no store com capacidade inicial para field_capacity campos.
-// Devolve NULL se o store for inválido ou alguma alocação falhar.
-ITEM *item_create(ITEM_STORE *store, size_t field_capacity)
-{
-  ITEM *item = malloc(sizeof(*item));
-  if (item == NULL)
-    return NULL;
-
-  item->count = 0;
-  item->fields = NULL;
-  item->capacity = 0;
-
-  if (field_capacity > 0) {
-    item->fields = malloc(sizeof(*item->fields) * field_capacity);
-    if (item->fields == NULL) {
-      free(item);
-      return NULL;
+bool item_init(ITEM *item, const char *key, uint64_t offset) {
+    if (item == NULL || key == NULL) return false;
+    memset(item, 0, sizeof(*item));
+    item->key = str_dup(key);
+    item->offsets = malloc(sizeof(*item->offsets));
+    if (item->key == NULL || item->offsets == NULL) {
+        item_destroy(item);
+        return false;
     }
-    item->capacity = field_capacity;
-  }
-
-  if(!store_add(store, item)){
-    free(item->fields);
-    free(item);
-    return NULL;
-  }
-
-  return item;
-
+    item->offsets[0] = offset;
+    item->offset_count = 1;
+    item->offset_capacity = 1;
+    return true;
 }
 
-// Acrescenta uma cópia do par name/raw_value; false indica entrada inválida ou falta de memória.
-bool item_set(ITEM *item, const char *name, const char *raw_value){
-  if (item == NULL || name == NULL || raw_value == NULL)
-    return false;
-
-  if(item->count == item->capacity){
-    size_t new_cap = item->capacity == 0 ? 4 : item->capacity * 2;
-    FIELD *temp = realloc(item->fields, new_cap * sizeof(*temp));
-    if(temp == NULL)
-      return false;
-    item->fields = temp;
-    item->capacity = new_cap;
-  }
-
-  char *n = copy_string(name);
-  char *v = copy_string(raw_value);
-  if (n == NULL || v == NULL) {
-    free(n);
-    free(v);
-    return false;
-  }
-
-  item->fields[item->count].name = n;
-  item->fields[item->count].value = v;
-  item->count++;
-
-  return true;
-}
-
-const char *item_get(const ITEM *item, const char *name){
-  if(item == NULL || name == NULL)
-    return NULL;
-
-  for (size_t i = 0; i < item->count; i++) {
-    if(strcmp(item->fields[i].name, name) == 0)
-      return item->fields[i].value;
-  }
-  return NULL;
-}
-
-// Converte o campo inteiro para double e grava em value; false cobre campo ausente ou texto inválido.
-bool item_get_number(const ITEM *item, const char *name, double *value){
-  if(value == NULL)
-    return false;
-
-  const char *texto = item_get(item, name);
-  if(texto == NULL)
-    return false;
-
-  char *fim;
-  double x = strtod(texto, &fim);
-  if (fim == texto)
-    return false; // Não há número no início do campo.
-
-  while (isspace((unsigned char)*fim))
-    fim++;
-
-  if (*fim != '\0')
-    return false; // Há caracteres sobrando depois do número.
-
-  *value = x;
-  return true;
-}
-
-size_t item_field_count(const ITEM *item){
-  return item == NULL ? 0 : item->count;
-}
-
-const char *item_field_name(const ITEM *item, size_t index){
-  return (item == NULL || index >= item->count) ? NULL : item->fields[index].name;
-}
-const char *item_field_value(const ITEM *item, size_t index){
-  return (item == NULL || index >= item->count) ? NULL : item->fields[index].value;
-}
-
-// Acrescenta o ITEM ao vetor de propriedade do store; false indica entrada inválida ou falha de realloc.
-static bool store_add(ITEM_STORE *store, ITEM *item){
-  if(store == NULL || item == NULL)
-    return false;
-
-  if(store->count == store->capacity){
-    size_t new_cap = store->capacity == 0 ? 4 : store->capacity * 2;
-    ITEM **temp = realloc(store->items, new_cap * sizeof(*temp));
-    if(temp == NULL)
-      return false;
-    store->items = temp;
-    store->capacity = new_cap;
-  }
-  store->items[store->count] = item;
-  store->count++;
-
-  return true;
-}
-
-ITEM_STORE *item_store_create(void){
-  ITEM_STORE *store = malloc(sizeof(*store));
-  if(store == NULL)
-    return NULL;
-
-  store->count = 0;
-  store->items = NULL;
-  store->capacity = 0;
-
-  return store;
-}
-
-void item_store_destroy(ITEM_STORE **store)
-{
-  if (store == NULL || *store == NULL)
-    return;
-
-  for (size_t i = 0; i < (*store)->count; i++) {
-    ITEM *item = (*store)->items[i];
-
-    for (size_t j = 0; j < item->count; j++) {
-      free(item->fields[j].name);
-      free(item->fields[j].value);
+bool item_append(ITEM *item, uint64_t offset) {
+    size_t capacity;
+    uint64_t *grown;
+    if (item == NULL) return false;
+    if (item->offset_count == item->offset_capacity) {
+        capacity = item->offset_capacity == 0 ? 4 : item->offset_capacity * 2;
+        if (capacity < item->offset_capacity) return false;
+        grown = realloc(item->offsets, capacity * sizeof(*grown));
+        if (grown == NULL) return false;
+        item->offsets = grown;
+        item->offset_capacity = capacity;
     }
+    item->offsets[item->offset_count++] = offset;
+    return true;
+}
 
-    free(item->fields);
-    free(item);
-  }
+void item_destroy(ITEM *item) {
+    if (item == NULL) return;
+    free(item->key);
+    free(item->offsets);
+    memset(item, 0, sizeof(*item));
+}
 
-  free((*store)->items);
-  free(*store);
-  *store = NULL;
+bool item_write(FILE *file, const ITEM *item) {
+    size_t length;
+    size_t i;
+    if (file == NULL || item == NULL || item->key == NULL || item->offset_count == 0)
+        return false;
+    length = strlen(item->key);
+    if (length > UINT32_MAX) return false;
+    if (!write_u32(file, (uint32_t)length) || !write_u64(file, (uint64_t)item->offset_count))
+        return false;
+    if (fwrite(item->key, 1, length, file) != length) return false;
+    for (i = 0; i < item->offset_count; i++) {
+        if (!write_u64(file, item->offsets[i])) return false;
+    }
+    return true;
+}
+
+bool item_read(FILE *file, ITEM *item, uint64_t data_size,
+               uint64_t *record_count) {
+    uint32_t key_length;
+    uint64_t offset_count, remaining, i, offset;
+    if (file == NULL || item == NULL || record_count == NULL) return false;
+    memset(item, 0, sizeof(*item));
+    if (!read_u32(file, &key_length) || key_length > 1048576 ||
+        !read_u64(file, &offset_count) || offset_count == 0) return false;
+    if (offset_count > MAX_ITEM_OFFSETS ||
+        !file_remaining(file, &remaining) || key_length > remaining) return false;
+    remaining -= key_length;
+    if (offset_count > remaining / 8 || offset_count > (uint64_t)(size_t)-1 / sizeof(*item->offsets))
+        return false;
+    item->key = malloc((size_t)key_length + 1);
+    item->offsets = malloc((size_t)offset_count * sizeof(*item->offsets));
+    if (item->key == NULL || item->offsets == NULL ||
+        fread(item->key, 1, key_length, file) != key_length) {
+        item_destroy(item);
+        return false;
+    }
+    item->key[key_length] = '\0';
+    for (i = 0; i < offset_count; i++) {
+        if (!read_u64(file, &offset) || offset >= data_size) {
+            item_destroy(item);
+            return false;
+        }
+        item->offsets[i] = offset;
+    }
+    if (*record_count > UINT64_MAX - offset_count) {
+        item_destroy(item);
+        return false;
+    }
+    item->offset_count = (size_t)offset_count;
+    item->offset_capacity = (size_t)offset_count;
+    *record_count += offset_count;
+    return true;
 }

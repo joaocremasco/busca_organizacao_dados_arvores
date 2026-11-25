@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620">
+<rect width="100%" height="100%" fill="white"/>
+<text x="500.0" y="34" text-anchor="middle" font-family="sans-serif" font-size="20">RECOLORS e construção — games, chave Genres</text>
+<path d="M100,75 V475 H965" fill="none" stroke="#333"/>
+<path d="M100.0,75 V475" stroke="#ddd"/>
+<path d="M100,475.0 H965" stroke="#ddd"/>
+<text x="100.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">50</text>
+<text x="88" y="479.0" text-anchor="end" font-family="sans-serif" font-size="12">0</text>
+<path d="M273.0,75 V475" stroke="#ddd"/>
+<path d="M100,395.0 H965" stroke="#ddd"/>
+<text x="273.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">87.92</text>
+<text x="88" y="399.0" text-anchor="end" font-family="sans-serif" font-size="12">417.4</text>
+<path d="M446.0,75 V475" stroke="#ddd"/>
+<path d="M100,315.0 H965" stroke="#ddd"/>
+<text x="446.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">125.8</text>
+<text x="88" y="319.0" text-anchor="end" font-family="sans-serif" font-size="12">834.8</text>
+<path d="M619.0,75 V475" stroke="#ddd"/>
+<path d="M100,235.0 H965" stroke="#ddd"/>
+<text x="619.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">163.8</text>
+<text x="88" y="239.0" text-anchor="end" font-family="sans-serif" font-size="12">1252</text>
+<path d="M792.0,75 V475" stroke="#ddd"/>
+<path d="M100,155.0 H965" stroke="#ddd"/>
+<text x="792.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">201.7</text>
+<text x="88" y="159.0" text-anchor="end" font-family="sans-serif" font-size="12">1670</text>
+<path d="M965.0,75 V475" stroke="#ddd"/>
+<path d="M100,75.0 H965" stroke="#ddd"/>
+<text x="965.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">239.6</text>
+<text x="88" y="79.0" text-anchor="end" font-family="sans-serif" font-size="12">2087</text>
+<text x="532.5" y="585" text-anchor="middle" font-family="sans-serif" font-size="15">BUILD_MS (ms)</text>
+<text transform="translate(25 275.0) rotate(-90)" text-anchor="middle" font-family="sans-serif" font-size="15">RECOLORS</text>
+<path d="M130.3,475.0 L964.2,475.0" fill="none" stroke="#2457a7" stroke-width="2"/>
+<circle cx="130.3" cy="475.0" r="3" fill="#2457a7"/>
+<circle cx="964.2" cy="475.0" r="3" fill="#2457a7"/>
+<path d="M100,530 h24" stroke="#2457a7" stroke-width="3"/>
+<text x="130" y="535" font-family="sans-serif" font-size="12">abb</text>
+<path d="M100.0,475.0 L965.0,475.0" fill="none" stroke="#d14a32" stroke-width="2"/>
+<circle cx="100.0" cy="475.0" r="3" fill="#d14a32"/>
+<circle cx="965.0" cy="475.0" r="3" fill="#d14a32"/>
+<path d="M385,530 h24" stroke="#d14a32" stroke-width="3"/>
+<text x="415" y="535" font-family="sans-serif" font-size="12">avl</text>
+<path d="M121.6,363.1 L957.0,75.0" fill="none" stroke="#23834a" stroke-width="2"/>
+<circle cx="121.6" cy="363.1" r="3" fill="#23834a"/>
+<circle cx="957.0" cy="75.0" r="3" fill="#23834a"/>
+<path d="M670,530 h24" stroke="#23834a" stroke-width="3"/>
+<text x="700" y="535" font-family="sans-serif" font-size="12">rubro_negra</text>
+</svg>

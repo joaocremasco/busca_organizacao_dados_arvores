@@ -1,0 +1,121 @@
+dataset,size,tree,key,metric,mean,stddev,runs,reference,diff_pct
+asteroids,1000,abb,on_sentry_list,BUILD_MS,4.1944,2.1513668626661,10,abb,0.0
+asteroids,1000,abb,on_sentry_list,INSERT_COMPARISONS,1060.0,0.0,10,abb,0.0
+asteroids,1000,abb,on_sentry_list,RECOLORS,0.0,0.0,10,abb,
+asteroids,1000,abb,on_sentry_list,ROTATIONS,0.0,0.0,10,abb,
+asteroids,1000,abb,on_sentry_list,TREE_HEIGHT,2.0,0.0,10,abb,0.0
+asteroids,1000,abb,year,BUILD_MS,4.5529,2.288036103541881,10,abb,0.0
+asteroids,1000,abb,year,INSERT_COMPARISONS,5813.0,0.0,10,abb,0.0
+asteroids,1000,abb,year,RECOLORS,0.0,0.0,10,abb,
+asteroids,1000,abb,year,ROTATIONS,0.0,0.0,10,abb,
+asteroids,1000,abb,year,TREE_HEIGHT,12.0,0.0,10,abb,0.0
+asteroids,1000,avl,on_sentry_list,BUILD_MS,5.0066,2.6284309726104236,10,abb,19.363913789814987
+asteroids,1000,avl,on_sentry_list,INSERT_COMPARISONS,1060.0,0.0,10,abb,0.0
+asteroids,1000,avl,on_sentry_list,RECOLORS,0.0,0.0,10,abb,
+asteroids,1000,avl,on_sentry_list,ROTATIONS,0.0,0.0,10,abb,
+asteroids,1000,avl,on_sentry_list,TREE_HEIGHT,2.0,0.0,10,abb,0.0
+asteroids,1000,avl,year,BUILD_MS,5.3203,2.8783357093215436,10,abb,16.855191196819597
+asteroids,1000,avl,year,INSERT_COMPARISONS,5363.0,0.0,10,abb,-7.741269568209185
+asteroids,1000,avl,year,RECOLORS,0.0,0.0,10,abb,
+asteroids,1000,avl,year,ROTATIONS,53.0,0.0,10,abb,
+asteroids,1000,avl,year,TREE_HEIGHT,8.0,0.0,10,abb,-33.33333333333333
+asteroids,1000,rubro_negra,on_sentry_list,BUILD_MS,4.3248,1.9130561239371242,10,abb,3.1089071142475646
+asteroids,1000,rubro_negra,on_sentry_list,INSERT_COMPARISONS,1060.0,0.0,10,abb,0.0
+asteroids,1000,rubro_negra,on_sentry_list,RECOLORS,1.0,0.0,10,abb,
+asteroids,1000,rubro_negra,on_sentry_list,ROTATIONS,0.0,0.0,10,abb,
+asteroids,1000,rubro_negra,on_sentry_list,TREE_HEIGHT,2.0,0.0,10,abb,0.0
+asteroids,1000,rubro_negra,year,BUILD_MS,4.8369,2.090102839043519,10,abb,6.237782512244938
+asteroids,1000,rubro_negra,year,INSERT_COMPARISONS,5446.0,0.0,10,abb,-6.313435403406159
+asteroids,1000,rubro_negra,year,RECOLORS,187.0,0.0,10,abb,
+asteroids,1000,rubro_negra,year,ROTATIONS,43.0,0.0,10,abb,
+asteroids,1000,rubro_negra,year,TREE_HEIGHT,8.0,0.0,10,abb,-33.33333333333333
+asteroids,10000,abb,on_sentry_list,BUILD_MS,58.8758,13.131194722661165,10,abb,0.0
+asteroids,10000,abb,on_sentry_list,INSERT_COMPARISONS,10594.0,0.0,10,abb,0.0
+asteroids,10000,abb,on_sentry_list,RECOLORS,0.0,0.0,10,abb,
+asteroids,10000,abb,on_sentry_list,ROTATIONS,0.0,0.0,10,abb,
+asteroids,10000,abb,on_sentry_list,TREE_HEIGHT,2.0,0.0,10,abb,0.0
+asteroids,10000,abb,year,BUILD_MS,62.0717,16.812605694339393,10,abb,0.0
+asteroids,10000,abb,year,INSERT_COMPARISONS,69530.0,0.0,10,abb,0.0
+asteroids,10000,abb,year,RECOLORS,0.0,0.0,10,abb,
+asteroids,10000,abb,year,ROTATIONS,0.0,0.0,10,abb,
+asteroids,10000,abb,year,TREE_HEIGHT,13.0,0.0,10,abb,0.0
+asteroids,10000,avl,on_sentry_list,BUILD_MS,58.417,11.386977845084465,10,abb,-0.7792675428614075
+asteroids,10000,avl,on_sentry_list,INSERT_COMPARISONS,10594.0,0.0,10,abb,0.0
+asteroids,10000,avl,on_sentry_list,RECOLORS,0.0,0.0,10,abb,
+asteroids,10000,avl,on_sentry_list,ROTATIONS,0.0,0.0,10,abb,
+asteroids,10000,avl,on_sentry_list,TREE_HEIGHT,2.0,0.0,10,abb,0.0
+asteroids,10000,avl,year,BUILD_MS,63.5089,9.088931295812507,10,abb,2.3153868832334177
+asteroids,10000,avl,year,INSERT_COMPARISONS,55400.0,0.0,10,abb,-20.322163095066877
+asteroids,10000,avl,year,RECOLORS,0.0,0.0,10,abb,
+asteroids,10000,avl,year,ROTATIONS,53.0,0.0,10,abb,
+asteroids,10000,avl,year,TREE_HEIGHT,7.0,0.0,10,abb,-46.15384615384615
+asteroids,10000,rubro_negra,on_sentry_list,BUILD_MS,57.3639,11.543053605716489,10,abb,-2.5679481212994086
+asteroids,10000,rubro_negra,on_sentry_list,INSERT_COMPARISONS,10594.0,0.0,10,abb,0.0
+asteroids,10000,rubro_negra,on_sentry_list,RECOLORS,1.0,0.0,10,abb,
+asteroids,10000,rubro_negra,on_sentry_list,ROTATIONS,0.0,0.0,10,abb,
+asteroids,10000,rubro_negra,on_sentry_list,TREE_HEIGHT,2.0,0.0,10,abb,0.0
+asteroids,10000,rubro_negra,year,BUILD_MS,61.8322,15.873243985468825,10,abb,-0.38584411253437495
+asteroids,10000,rubro_negra,year,INSERT_COMPARISONS,54948.0,0.0,10,abb,-20.97224219761254
+asteroids,10000,rubro_negra,year,RECOLORS,167.0,0.0,10,abb,
+asteroids,10000,rubro_negra,year,ROTATIONS,44.0,0.0,10,abb,
+asteroids,10000,rubro_negra,year,TREE_HEIGHT,8.0,0.0,10,abb,-38.46153846153847
+games,1000,abb,Genres,BUILD_MS,56.634100000000004,28.743025571238825,10,abb,0.0
+games,1000,abb,Genres,INSERT_COMPARISONS,7667.0,0.0,10,abb,0.0
+games,1000,abb,Genres,RECOLORS,0.0,0.0,10,abb,
+games,1000,abb,Genres,ROTATIONS,0.0,0.0,10,abb,
+games,1000,abb,Genres,TREE_HEIGHT,17.0,0.0,10,abb,0.0
+games,1000,abb,Release date,BUILD_MS,54.8429,26.10790592670691,10,abb,0.0
+games,1000,abb,Release date,INSERT_COMPARISONS,13133.0,0.0,10,abb,0.0
+games,1000,abb,Release date,RECOLORS,0.0,0.0,10,abb,
+games,1000,abb,Release date,ROTATIONS,0.0,0.0,10,abb,
+games,1000,abb,Release date,TREE_HEIGHT,26.0,0.0,10,abb,0.0
+games,1000,avl,Genres,BUILD_MS,49.9994,24.405831790327856,10,abb,-11.71502681246811
+games,1000,avl,Genres,INSERT_COMPARISONS,6293.0,0.0,10,abb,-17.920959958262685
+games,1000,avl,Genres,RECOLORS,0.0,0.0,10,abb,
+games,1000,avl,Genres,ROTATIONS,181.0,0.0,10,abb,
+games,1000,avl,Genres,TREE_HEIGHT,10.0,0.0,10,abb,-41.17647058823529
+games,1000,avl,Release date,BUILD_MS,54.5924,27.72598897224207,10,abb,-0.4567592158693329
+games,1000,avl,Release date,INSERT_COMPARISONS,8460.0,0.0,10,abb,-35.58212137363893
+games,1000,avl,Release date,RECOLORS,0.0,0.0,10,abb,
+games,1000,avl,Release date,ROTATIONS,631.0,0.0,10,abb,
+games,1000,avl,Release date,TREE_HEIGHT,12.0,0.0,10,abb,-53.84615384615385
+games,1000,rubro_negra,Genres,BUILD_MS,54.7364,26.67622250119633,10,abb,-3.3508080820565707
+games,1000,rubro_negra,Genres,INSERT_COMPARISONS,6056.0,0.0,10,abb,-21.01212990739533
+games,1000,rubro_negra,Genres,RECOLORS,584.0,0.0,10,abb,
+games,1000,rubro_negra,Genres,ROTATIONS,149.0,0.0,10,abb,
+games,1000,rubro_negra,Genres,TREE_HEIGHT,10.0,0.0,10,abb,-41.17647058823529
+games,1000,rubro_negra,Release date,BUILD_MS,55.076499999999996,27.583151718435335,10,abb,0.42594392346136983
+games,1000,rubro_negra,Release date,INSERT_COMPARISONS,8526.0,0.0,10,abb,-35.079570547475825
+games,1000,rubro_negra,Release date,RECOLORS,1919.0,0.0,10,abb,
+games,1000,rubro_negra,Release date,ROTATIONS,481.0,0.0,10,abb,
+games,1000,rubro_negra,Release date,TREE_HEIGHT,12.0,0.0,10,abb,-53.84615384615385
+games,10000,abb,Genres,BUILD_MS,239.4368,15.969553015382461,10,abb,0.0
+games,10000,abb,Genres,INSERT_COMPARISONS,84732.0,0.0,10,abb,0.0
+games,10000,abb,Genres,RECOLORS,0.0,0.0,10,abb,
+games,10000,abb,Genres,ROTATIONS,0.0,0.0,10,abb,
+games,10000,abb,Genres,TREE_HEIGHT,24.0,0.0,10,abb,0.0
+games,10000,abb,Release date,BUILD_MS,234.71099999999998,4.86401715548875,10,abb,0.0
+games,10000,abb,Release date,INSERT_COMPARISONS,132272.0,0.0,10,abb,0.0
+games,10000,abb,Release date,RECOLORS,0.0,0.0,10,abb,
+games,10000,abb,Release date,ROTATIONS,0.0,0.0,10,abb,
+games,10000,abb,Release date,TREE_HEIGHT,28.0,0.0,10,abb,0.0
+games,10000,avl,Genres,BUILD_MS,239.6164,16.73967615643213,10,abb,0.07500935528707096
+games,10000,avl,Genres,INSERT_COMPARISONS,77576.0,0.0,10,abb,-8.445451541330312
+games,10000,avl,Genres,RECOLORS,0.0,0.0,10,abb,
+games,10000,avl,Genres,ROTATIONS,627.0,0.0,10,abb,
+games,10000,avl,Genres,TREE_HEIGHT,11.0,0.0,10,abb,-54.166666666666664
+games,10000,avl,Release date,BUILD_MS,233.186,4.980486522419273,10,abb,-0.6497352062749413
+games,10000,avl,Release date,INSERT_COMPARISONS,103155.0,0.0,10,abb,-22.012973267206966
+games,10000,avl,Release date,RECOLORS,0.0,0.0,10,abb,
+games,10000,avl,Release date,ROTATIONS,2259.0,0.0,10,abb,
+games,10000,avl,Release date,TREE_HEIGHT,14.0,0.0,10,abb,-50.0
+games,10000,rubro_negra,Genres,BUILD_MS,237.871,12.56728470628754,10,abb,-0.6539512723190403
+games,10000,rubro_negra,Genres,INSERT_COMPARISONS,77020.0,0.0,10,abb,-9.10163810602842
+games,10000,rubro_negra,Genres,RECOLORS,2087.0,0.0,10,abb,
+games,10000,rubro_negra,Genres,ROTATIONS,527.0,0.0,10,abb,
+games,10000,rubro_negra,Genres,TREE_HEIGHT,12.0,0.0,10,abb,-50.0
+games,10000,rubro_negra,Release date,BUILD_MS,233.18189999999998,5.5164302356183645,10,abb,-0.6514820353541163
+games,10000,rubro_negra,Release date,INSERT_COMPARISONS,104699.0,0.0,10,abb,-20.845681625740898
+games,10000,rubro_negra,Release date,RECOLORS,7672.0,0.0,10,abb,
+games,10000,rubro_negra,Release date,ROTATIONS,1973.0,0.0,10,abb,
+games,10000,rubro_negra,Release date,TREE_HEIGHT,14.0,0.0,10,abb,-50.0

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620">
+<rect width="100%" height="100%" fill="white"/>
+<text x="500.0" y="34" text-anchor="middle" font-family="sans-serif" font-size="20">TOTAL_MS — complex, games; ms</text>
+<path d="M100,75 V475 H965" fill="none" stroke="#333"/>
+<path d="M100.0,75 V475" stroke="#ddd"/>
+<path d="M100,475.0 H965" stroke="#ddd"/>
+<text x="100.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">10</text>
+<text x="88" y="479.0" text-anchor="end" font-family="sans-serif" font-size="12">6.097</text>
+<path d="M273.0,75 V475" stroke="#ddd"/>
+<path d="M100,395.0 H965" stroke="#ddd"/>
+<text x="273.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">208</text>
+<text x="88" y="399.0" text-anchor="end" font-family="sans-serif" font-size="12">16.92</text>
+<path d="M446.0,75 V475" stroke="#ddd"/>
+<path d="M100,315.0 H965" stroke="#ddd"/>
+<text x="446.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">406</text>
+<text x="88" y="319.0" text-anchor="end" font-family="sans-serif" font-size="12">27.74</text>
+<path d="M619.0,75 V475" stroke="#ddd"/>
+<path d="M100,235.0 H965" stroke="#ddd"/>
+<text x="619.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">604</text>
+<text x="88" y="239.0" text-anchor="end" font-family="sans-serif" font-size="12">38.56</text>
+<path d="M792.0,75 V475" stroke="#ddd"/>
+<path d="M100,155.0 H965" stroke="#ddd"/>
+<text x="792.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">802</text>
+<text x="88" y="159.0" text-anchor="end" font-family="sans-serif" font-size="12">49.38</text>
+<path d="M965.0,75 V475" stroke="#ddd"/>
+<path d="M100,75.0 H965" stroke="#ddd"/>
+<text x="965.0" y="499" text-anchor="middle" font-family="sans-serif" font-size="12">1000</text>
+<text x="88" y="79.0" text-anchor="end" font-family="sans-serif" font-size="12">60.2</text>
+<text x="532.5" y="585" text-anchor="middle" font-family="sans-serif" font-size="15">Chaves consultadas</text>
+<text transform="translate(25 275.0) rotate(-90)" text-anchor="middle" font-family="sans-serif" font-size="15">TOTAL_MS</text>
+<path d="M100.0,475.0 L178.6,450.2 L965.0,268.5" fill="none" stroke="#2457a7" stroke-width="2"/>
+<circle cx="100.0" cy="475.0" r="3" fill="#2457a7"/>
+<circle cx="178.6" cy="450.2" r="3" fill="#2457a7"/>
+<circle cx="965.0" cy="268.5" r="3" fill="#2457a7"/>
+<path d="M100,530 h24" stroke="#2457a7" stroke-width="3"/>
+<text x="130" y="535" font-family="sans-serif" font-size="12">abb, N=1000</text>
+<path d="M100.0,423.2 L178.6,367.8 L965.0,75.0" fill="none" stroke="#d14a32" stroke-width="2"/>
+<circle cx="100.0" cy="423.2" r="3" fill="#d14a32"/>
+<circle cx="178.6" cy="367.8" r="3" fill="#d14a32"/>
+<circle cx="965.0" cy="75.0" r="3" fill="#d14a32"/>
+<path d="M385,530 h24" stroke="#d14a32" stroke-width="3"/>
+<text x="415" y="535" font-family="sans-serif" font-size="12">abb, N=10000</text>
+<path d="M100.0,474.1 L178.6,448.4 L965.0,289.9" fill="none" stroke="#23834a" stroke-width="2"/>
+<circle cx="100.0" cy="474.1" r="3" fill="#23834a"/>
+<circle cx="178.6" cy="448.4" r="3" fill="#23834a"/>
+<circle cx="965.0" cy="289.9" r="3" fill="#23834a"/>
+<path d="M670,530 h24" stroke="#23834a" stroke-width="3"/>
+<text x="700" y="535" font-family="sans-serif" font-size="12">avl, N=1000</text>
+<path d="M100.0,426.8 L178.6,365.2 L965.0,84.9" fill="none" stroke="#8b55a1" stroke-width="2"/>
+<circle cx="100.0" cy="426.8" r="3" fill="#8b55a1"/>
+<circle cx="178.6" cy="365.2" r="3" fill="#8b55a1"/>
+<circle cx="965.0" cy="84.9" r="3" fill="#8b55a1"/>
+<path d="M100,550 h24" stroke="#8b55a1" stroke-width="3"/>
+<text x="130" y="555" font-family="sans-serif" font-size="12">avl, N=10000</text>
+<path d="M100.0,473.7 L178.6,444.7 L965.0,279.0" fill="none" stroke="#d18b16" stroke-width="2"/>
+<circle cx="100.0" cy="473.7" r="3" fill="#d18b16"/>
+<circle cx="178.6" cy="444.7" r="3" fill="#d18b16"/>
+<circle cx="965.0" cy="279.0" r="3" fill="#d18b16"/>
+<path d="M385,550 h24" stroke="#d18b16" stroke-width="3"/>
+<text x="415" y="555" font-family="sans-serif" font-size="12">rubro_negra, N=1000</text>
+<path d="M100.0,414.5 L178.6,365.6 L965.0,86.9" fill="none" stroke="#198d9a" stroke-width="2"/>
+<circle cx="100.0" cy="414.5" r="3" fill="#198d9a"/>
+<circle cx="178.6" cy="365.6" r="3" fill="#198d9a"/>
+<circle cx="965.0" cy="86.9" r="3" fill="#198d9a"/>
+<path d="M670,550 h24" stroke="#198d9a" stroke-width="3"/>
+<text x="700" y="555" font-family="sans-serif" font-size="12">rubro_negra, N=10000</text>
+</svg>
