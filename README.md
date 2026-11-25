@@ -1,20 +1,51 @@
 # Projeto 2 — Árvores de busca
 
-Implementação em C do Projeto 2 de SCC0202. O programa deverá indexar as bases do Projeto 1 com ABB, AVL ou rubro-negra, persistir os índices e executar buscas simples e complexas por offsets.
+Implementação em C do Projeto 2 de SCC0202. ABB, AVL e rubro-negra são TADs distintos, cada um com tipo opaco, interface própria e módulo próprio. A CLI seleciona o TAD por uma fachada comum. Cada árvore guarda um nó por chave distinta e todos os offsets de registros repetidos.
+
+## Compilar
+
+```sh
+make
+```
+
+O comando gera `trabalho`. O código não usa `goto`. As chaves são strings comparadas lexicograficamente, com igualdade exata nas consultas.
+
+## Indexar
+
+As bases do Projeto 1 ficam no repositório irmão `../Busca_Organizacao_Dados`:
+
+```sh
+./trabalho --mode index --reader nasa \
+  --input ../Busca_Organizacao_Dados/asteroid_dataset_20251019.csv \
+  --tree avl --key year --index indices/ano.avl.idx --limit 0
+```
+
+```sh
+./trabalho --mode index --reader games \
+  --input ../Busca_Organizacao_Dados/games.csv \
+  --tree rubro_negra --key Genres --index indices/generos.rb.idx --limit 0
+```
+
+## Buscar
+
+Cada linha de consulta usa `KEY|coluna|valor`. A busca complexa calcula a união dos resultados dos índices fornecidos.
+
+```sh
+./trabalho --mode search --reader nasa \
+  --input ../Busca_Organizacao_Dados/asteroid_dataset_20251019.csv \
+  --index indices/ano.avl.idx --query consultas/asteroides_ano.txt \
+  --output resultados/anos.csv
+```
+
+Repita `--index` para as colunas de uma busca complexa. O índice registra o tipo de árvore, chave, caminho e metadados da base. O carregamento valida tamanho, data de modificação, dispositivo e inode antes de aceitar o índice. As buscas recuperam registros por offset e preservam o CSV original.
 
 ## Organização
 
-- `include/trabalho/`: interfaces dos TADs e módulos.
-- `src/`: árvores, leitores, persistência, busca e CLI.
-- `tests/`: testes funcionais e de integração.
-- `consultas/`: consultas de exemplo.
-- `dados/`: instruções ou links para as bases (evite versionar bases grandes).
-- `indices/` e `resultados/`: artefatos gerados localmente.
-- `experimentos/`: dados brutos, scripts, gráficos e relatório.
-- `docs/`: decisões de projeto e formato do índice.
+- `src/abb.c`, `src/avl.c`, `src/rubro_negra.c`: TADs das três árvores.
+- `src/tree.c`: fachada para selecionar a árvore.
+- `src/item.c`, `src/reader.c`: modelo e leitor CSV adaptados do Projeto 1, com offsets em bytes.
+- `src/tree_entry.c`: chave e coleção de offsets.
+- `src/main.c`: CLI, persistência, consultas, exportação e métricas.
+- `include/`: interfaces públicas; `consultas/`: exemplos; `docs/`: decisões de implementação.
 
-O Projeto 1 está em `../projeto1`. Reaproveite/adapte seus módulos de leitura CSV e exportação conforme necessário, mantendo a implementação do Projeto 2 independente.
-
-## Compilação e execução
-
-O enunciado exige que `make` produza o executável `trabalho`. Exemplos de uso estarão disponíveis aqui quando a CLI estiver implementada.
+O leitor processa um registro por vez e libera seu armazenamento temporário após a indexação. A persistência grava a topologia e os metadados de balanceamento, sem ponteiros de memória.
